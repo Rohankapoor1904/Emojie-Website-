@@ -1,0 +1,7 @@
+# Ignore temp files and logs
+*.log
+*.tmp
+__pycache__/
+node_modules/
+.env
+.DS_Store

@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://unpkg.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'none'; object-src 'none'; base-uri 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=()">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Anti-Clickjacking -->
+    <style>
+        body { display: none; }
+        .security-frame-buster { display: block !important; }
+    </style>
+    <script>
+        // Frame busting
+        if (top !== self) {
+            top.location.href = self.location.href;
+        }
+        // Show body only if not in frame
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.self === window.top) {
+                document.body.style.display = 'block';
+                document.body.classList.add('security-frame-buster');
+            }
+        });
+    </script>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preload" href="auth.js" as="script">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onerror="console.warn('Failed to load Font Awesome')">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    
+    <title>Emoji & GIF Paradise</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css"/>
+    <style id="join-channels-style"></style>
+</head>
+<body>
+    <div class="floating-bg">
+        <span class="floating-emoji animate-float" style="left:10%;top:20%;">😎</span>
+        <span class="floating-emoji animate-float" style="right:15%;top:40%;">🎉</span>
+        <span class="floating-emoji animate-float" style="left:30%;top:70%;">😂</span>
+        <span class="floating-emoji animate-float" style="right:25%;top:80%;">🥳</span>
+    </div>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo logo-flex">
+                    <h1 class="logo-title">🎨 Emoji Paradise</h1>
+                </div>
+                <div class="hamburger" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#emojis" class="nav-link">Emojis</a></li>
+                    <li><a href="#gifs" class="nav-link">GIFs</a></li>
+                    <li><a href="#customize" class="nav-link">Customize</a></li>
+                    <li><a href="#downloads" class="nav-link">Downloads</a></li>
+                    <li><a href="join-channels.html" class="nav-link join-btn" id="join-channels-btn">Join Channels/Servers</a></li>
+                    <li class="nav-item auth-container">
+                        <div class="auth-toggle">
+                            <button type="button" class="auth-btn" data-tab="login" id="nav-login-btn" onclick="showAuthModal('login')">Login</button>
+                            <button type="button" class="auth-btn" data-tab="signup" id="nav-signup-btn" onclick="showAuthModal('signup')">Sign Up</button>
+                            <script>
+                            // Fix: Always update nav auth toggle highlight on modal open
+                            (function() {
+                              const origShowAuthModal = window.showAuthModal;
+                              window.showAuthModal = function(formType) {
+                                setTimeout(function() {
+                                  var loginBtn = document.getElementById('nav-login-btn');
+                                  var signupBtn = document.getElementById('nav-signup-btn');
+                                  if (loginBtn && signupBtn) {
+                                    if (formType === 'signup') {
+                                      loginBtn.classList.remove('active');
+                                      signupBtn.classList.add('active');
+                                    } else {
+                                      signupBtn.classList.remove('active');
+                                      loginBtn.classList.add('active');
+                                    }
+                                  }
+                                }, 10); // after modal logic
+                                return origShowAuthModal.apply(this, arguments);
+                              };
+                            })();
+                            </script>
+                            <span class="auth-slider"></span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" data-aos="fade-up">
+            <div class="hero-content animate-pulse">
+                <span class="hero-emoji animate-float" style="font-size: 4rem; display:block; margin-bottom: 16px;">🎨</span>
+                <h2 data-aos="fade-up" data-aos-delay="100">Download & Create Amazing Emojis & GIFs</h2>
+                <p data-aos="fade-up" data-aos-delay="200">Explore thousands of emojis, GIFs, and create your own custom emojis!</p>
+            </div>
+        </section>
+
+        <!-- Emoji Section -->
+        <section id="emojis" class="content-section" data-aos="fade-up">
+            <h2>📱 Emoji Collection</h2>
+            <div class="search-container">
+                <input type="text" id="emoji-search" placeholder="Search emojis..." data-max-length="100" oninput="sanitizeInput(this)" autocomplete="off">
+                <button onclick="searchEmojis()"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="category-filter">
+                <button class="filter-btn active" onclick="filterEmojis('all')">All</button>
+                <button class="filter-btn" onclick="filterEmojis('smileys')">😀 Smileys</button>
+                <button class="filter-btn" onclick="filterEmojis('animals')">🐶 Animals</button>
+                <button class="filter-btn" onclick="filterEmojis('food')">🍕 Food</button>
+                <button class="filter-btn" onclick="filterEmojis('objects')">⚽ Objects</button>
+                <button class="filter-btn" onclick="filterEmojis('nature')">🌳 Nature</button>
+            </div>
+            <div id="emoji-grid" class="emoji-grid"></div>
+        </section>
+
+        <!-- GIF Section -->
+        <section id="gifs" class="content-section" data-aos="fade-up">
+            <h2>🎬 GIF Collection</h2>
+            <div class="search-container">
+                <input type="text" id="gif-search" placeholder="Search GIFs..." data-max-length="100" oninput="sanitizeInput(this)" autocomplete="off">
+                <button onclick="searchGifs()"><i class="fas fa-search"></i></button>
+            </div>
+            <div id="gif-grid" class="gif-grid"></div>
+        </section>
+
+        <!-- Customize Section -->
+        <section id="customize" class="content-section" data-aos="fade-up">
+            <h2>🎨 Create Custom Emojis</h2>
+            <div class="customize-container">
+                <div class="upload-section">
+                    <div class="upload-area" id="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Drag & drop an image or click to upload</p>
+                        <input type="file" id="image-upload" accept="image/*" hidden>
+                    </div>
+                </div>
+                <div class="editor-section">
+                    <canvas id="emoji-canvas" width="300" height="300"></canvas>
+                    <div class="editor-controls">
+                        <div class="control-group">
+                            <label>Size:</label>
+                            <input type="range" id="size-slider" min="50" max="500" value="300">
+                            <span id="size-value">300px</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Border Radius:</label>
+                            <input type="range" id="border-radius" min="0" max="150" value="0">
+                            <span id="radius-value">0px</span>
+                        </div>
+                        <div class="control-group">
+                            <label>Background Color:</label>
+                            <input type="color" id="bg-color" value="#ffffff">
+                        </div>
+                        <div class="control-group">
+                            <input type="text" id="emoji-text" placeholder="Add text to emoji" data-max-length="50" oninput="sanitizeInput(this)" autocomplete="off">
+                            <button onclick="addTextToEmoji()">Add Text</button>
+                        </div>
+                        <div class="control-group">
+                            <button onclick="resetCanvas()">Reset</button>
+                            <button onclick="downloadCustomEmoji()" class="download-btn">Download Custom Emoji</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Downloads Section -->
+        <section id="downloads" class="content-section" data-aos="fade-up">
+            <h2>📥 Your Downloads</h2>
+            <div class="download-controls">
+                <button onclick="downloadSelected()" class="download-btn">Download Selected (<span id="selected-count">0</span>)</button>
+                <button onclick="clearDownloads()" class="clear-btn">Clear All</button>
+            </div>
+            <div id="download-queue" class="download-queue"></div>
+        </section>
+    </main>
+
+    <!-- Join Channels/Servers Modal/Page logic removed: now handled by join-channels.html only. -->
+
+    <!-- Login/Signup Modal -->
+    <div id="auth-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title" style="display: none;">
+        <div class="modal-content auth-container animated-modal" tabindex="-1">
+            <div class="auth-close" onclick="closeAuthModal()" aria-label="Close authentication modal">
+                <span></span>
+                <span></span>
+            </div>
+            <!-- Animated Emoji/Illustration Container -->
+            <div class="auth-illustration auth-illustration-center">
+                <span class="emoji" id="auth-emoji inline">🔒</span>
+            </div>
+            <!-- Modal Logo/Icon -->
+            <div class="auth-modal-logo auth-modal-logo-flex">
+                <h1 id="auth-modal-title" class="auth-modal-logo-title">Emoji Paradise</h1>
+                <span>Authentication Modal</span>
+            </div>
+            <!-- Feedback Message Area (inside modal) -->
+            <div id="modal-message-container" class="message-container modal-message-mb10" aria-live="polite"></div>
+            <!-- Auth Content -->
+            <div class="auth-content">
+                <!-- Tabs -->
+                <div class="auth-tabs animated-tabs">
+                    <button class="auth-tab" data-tab="login" onclick="showAuthModal('login')" aria-selected="true" aria-controls="login-form">
+                        <span>Login</span>
+                    </button>
+                    <button class="auth-tab" data-tab="signup" onclick="showAuthModal('signup')" aria-selected="false" aria-controls="signup-form">
+                        <span>Sign Up</span>
+                    </button>
+                    <div class="tab-highlight"></div>
+                </div>
+                <!-- Login Form -->
+                <form id="login-form" class="auth-form animated-form" onsubmit="handleLogin(event)" data-csrf-token="">
+                    <div class="form-header form-header-center">
+                        <h2 class="form-header-title-mb">Welcome Back!</h2>
+                        <p class="subtitle form-header-subtitle-mb">Login to continue to your account</p>
+                    </div>
+                    
+                    <div class="form-group form-group-mb">
+                        <div class="input-group">
+                            <input type="email" id="login-email" required autocomplete="username" placeholder=" " aria-label="Email" data-max-length="254" oninput="sanitizeInput(this)" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                            <label for="login-email">Email</label>
+                            <span class="input-icon"><i class="fas fa-envelope"></i></span>
+                            <!-- <div class="input-underline"></div> -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-group form-group-mb">
+                        <div class="input-group">
+                            <input type="password" id="login-password" required autocomplete="current-password" placeholder=" " aria-label="Password" data-max-length="128" minlength="8" oninput="sanitizeInput(this)">
+                            <label for="login-password">Password</label>
+                            <span class="input-icon"><i class="fas fa-lock"></i></span>
+                            <button type="button" class="toggle-password" onclick="togglePassword('login-password')">
+                                <i class="far fa-eye"></i>
+                            </button>
+                            <!-- <div class="input-underline"></div> -->
+                        </div>
+                    </div>
+                    
+                    <div class="form-options" style="margin-bottom: 0.5rem;">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="remember-me">
+                            <span class="checkmark"></span>
+                            <span class="checkbox-label">Remember me</span>
+                        </label>
+                        <a href="#" onclick="showForgotPassword()" class="forgot-password">
+                            Forgot password?
+                        </a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block btn-animate btn-block-mb">
+                        <span class="btn-text">Login</span>
+                        <div class="btn-loader">
+                        </div>
+                    </button>
+                    
+                    <div class="auth-divider auth-divider-mb">
+                        <span>or continue with</span>
+                    </div>
+                    
+                    <div class="social-login social-login-center">
+                        <button type="button" class="btn-social btn-google" onclick="loginWithSocial('google')" aria-label="Login with Google">
+                            <i class="fab fa-google"></i>
+                            <span>Google</span>
+                        </button>
+                    </div>
+                    
+                    <p class="auth-switch auth-switch-center">
+                        Don't have an account? 
+                        <a href="#" onclick="showAuthModal('signup')">
+                            <span>Sign up</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </p>
+                </form>
+                
+                <!-- Signup Form -->
+                <form id="signup-form" class="auth-form animated-form" onsubmit="handleSignup(event)" data-csrf-token="">
+                    <div class="form-header form-header-center">
+                        <h2 class="form-header-title-mb">Create Account</h2>
+                        <p class="subtitle form-header-subtitle-mb">Join our emoji paradise community</p>
+                    </div>
+
+                    <div class="form-group form-group-mb">
+                        <div class="input-group">
+                            <input type="text" id="signup-username" required autocomplete="username" placeholder=" " aria-label="Username" data-max-length="30" minlength="3" oninput="sanitizeInput(this)" pattern="^[a-zA-Z0-9_]{3,30}$">
+                            <label for="signup-username">Username</label>
+                            <span class="input-icon"><i class="fas fa-user"></i></span>
+                            <!-- <div class="input-underline"></div> -->
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-mb">
+                        <div class="input-group">
+                            <input type="email" id="signup-email" required placeholder=" " aria-label="Email" data-max-length="254" oninput="sanitizeInput(this)" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                            <label for="signup-email">Email</label>
+                            <span class="input-icon"><i class="fas fa-envelope"></i></span>
+                            <!-- <div class="input-underline"></div> -->
+                        </div>
+                    </div>
+
+                    <div class="form-group form-group-mb-small">
+                        <div class="input-group">
+                            <input type="password" id="signup-password" required autocomplete="new-password" placeholder=" " aria-label="Password" oninput="updatePasswordStrength(); sanitizeInput(this)" data-max-length="128" minlength="8">
+                            <label for="signup-password">Password</label>
+                            <span class="input-icon"><i class="fas fa-lock"></i></span>
+                            <button type="button" class="toggle-password" onclick="togglePassword('signup-password')">
+                                <i class="far fa-eye"></i>
+                            </button>
+                            <!-- <div class="input-underline"></div> -->
+                        </div>
+                        <div id="password-strength" class="password-strength-mt"></div>
+                    </div>
+
+                    <div class="form-group terms terms-mb">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="terms" required>
+                            <span class="checkmark"></span>
+                            <span class="checkbox-label">I agree to the <a href="#" onclick="showTerms()">Terms of Service</a> and <a href="#" onclick="showTerms()">Privacy Policy</a></span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block btn-animate btn-block-mb">
+                        <span class="btn-text">Sign Up</span>
+                        <div class="btn-loader">
+                        </div>
+                    </button>
+
+                    <div class="auth-divider auth-divider-mb">
+                        <span>or sign up with</span>
+                    </div>
+
+                    <div class="social-login social-login-center">
+                        <button type="button" class="btn-social btn-google" onclick="loginWithSocial('google')" aria-label="Sign up with Google">
+                            <i class="fab fa-google"></i>
+                            <span>Google</span>
+                        </button>
+                    </div>
+
+                    <p class="auth-switch auth-switch-center">
+                        Already have an account? 
+                        <a href="#" onclick="showAuthModal('login')">
+                            <span>Login</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </p>
+                </form>
+                
+                <!-- Forgot Password Form -->
+                <form id="forgot-password-form" class="auth-form animated-form" onsubmit="handleForgotPassword(event)" data-csrf-token="">
+                    <div class="form-header">
+                        <h2>Reset Password</h2>
+                        <p class="subtitle">Enter your email address and we'll send you a link to reset your password.</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="email" id="reset-email" required data-max-length="254" oninput="sanitizeInput(this)" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
+                            <label for="reset-email">Email</label>
+                            <span class="input-icon"><i class="fas fa-envelope"></i></span>
+                            <!-- <div class="input-underline"></div> -->
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block btn-animate">
+                        <span class="btn-text">Send Reset Link</span>
+                        <div class="btn-loader">
+                        </div>
+                        <div class="btn-success">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div id="message-container" class="message-container"></div>
+
+    <footer class="footer-main enhanced-footer" data-aos="fade-up">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="footer-logo">🎨 Emoji & GIF Paradise</span>
+                <p class="footer-tagline">Your one-stop hub for creative emojis and GIFs. Join our community and express yourself!</p>
+            </div>
+            <div class="footer-center">
+                <div class="footer-social">
+                    <a href="https://github.com/your-repo" target="_blank" rel="noopener" class="footer-social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://discord.gg/your-invite" target="_blank" rel="noopener" class="footer-social-link" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                    <a href="https://twitter.com/your-handle" target="_blank" rel="noopener" class="footer-social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                </div>
+                <div class="footer-links">
+                    <a href="join-channels.html" target="_blank" rel="noopener" class="footer-link">Join Channels</a>
+                    <a href="#" onclick="showTerms();return false;" class="footer-link">Terms</a>
+                </div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-copyright">
+                    &copy; 2025 Emoji & GIF Paradise. All rights reserved.
+                </div>
+                <div class="footer-made">
+                    Made with <span class="footer-heart">&#10084;&#65039;</span> by the Emoji Paradise Team.
+                </div>
+            </div>
+        </div>
+        <button class="back-to-top" onclick="scrollToTop();" aria-label="Back to top">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </footer>
+
+    <script>
+        // Security Configuration
+        const SECURITY_CONFIG = {
+            MAX_LOGIN_ATTEMPTS: 5,
+            LOCKOUT_DURATION: 15 * 60 * 1000, // 15 minutes
+            SESSION_TIMEOUT: 30 * 60 * 1000, // 30 minutes
+            CSRF_TOKEN_HEADER: 'X-CSRF-Token',
+            RATE_LIMIT_WINDOW: 60 * 1000, // 1 minute
+            MAX_REQUESTS_PER_WINDOW: 30
+        };
+
+        // Security State
+        let securityState = {
+            loginAttempts: parseInt(localStorage.getItem('loginAttempts') || '0'),
+            lastAttempt: parseInt(localStorage.getItem('lastLoginAttempt') || '0'),
+            requestCount: 0,
+            windowStart: Date.now(),
+            csrfToken: '',
+            sessionStart: Date.now()
+        };
+
+        // Input Sanitization
+        function sanitizeInput(input) {
+            if (!input || !input.value) return;
+            
+            const maxLength = parseInt(input.getAttribute('data-max-length')) || 1000;
+            let value = input.value;
+            
+            // Trim to max length
+            if (value.length > maxLength) {
+                value = value.substring(0, maxLength);
+            }
+            
+            // Remove potentially dangerous characters
+            value = value.replace(/[<>'"&]/g, function(match) {
+                switch(match) {
+                    case '<': return '&lt;';
+                    case '>': return '&gt;';
+                    case '"': return '&quot;';
+                    case "'": return '&#x27;';
+                    case '&': return '&amp;';
+                    default: return match;
+                }
+            });
+            
+            // Remove script tags and javascript: protocols
+            value = value.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+            value = value.replace(/javascript:/gi, '');
+            value = value.replace(/on\w+\s*=/gi, '');
+            
+            input.value = value;
+        }
+
+        // Rate Limiting
+        function checkRateLimit() {
+            const now = Date.now();
+            
+            // Reset window if needed
+            if (now - securityState.windowStart > SECURITY_CONFIG.RATE_LIMIT_WINDOW) {
+                securityState.requestCount = 0;
+                securityState.windowStart = now;
+            }
+            
+            securityState.requestCount++;
+            
+            if (securityState.requestCount > SECURITY_CONFIG.MAX_REQUESTS_PER_WINDOW) {
+                showSecurityMessage('Too many requests. Please slow down.', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // CSRF Protection
+        function generateCSRFToken() {
+            const array = new Uint8Array(32);
+            crypto.getRandomValues(array);
+            return btoa(String.fromCharCode.apply(null, array));
+        }
+
+        function initCSRF() {
+            securityState.csrfToken = generateCSRFToken();
+            // Add CSRF token to all forms
+            document.querySelectorAll('form[data-csrf-token]').forEach(form => {
+                form.setAttribute('data-csrf-token', securityState.csrfToken);
+                
+                // Add hidden input for CSRF token
+                let csrfInput = form.querySelector('input[name="csrf_token"]');
+                if (!csrfInput) {
+                    csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = 'csrf_token';
+                    form.appendChild(csrfInput);
+                }
+                csrfInput.value = securityState.csrfToken;
+            });
+        }
+
+        // Login Attempt Tracking
+        function checkLoginAttempts() {
+            const now = Date.now();
+            
+            // Check if locked out
+            if (securityState.loginAttempts >= SECURITY_CONFIG.MAX_LOGIN_ATTEMPTS) {
+                const timeSinceLastAttempt = now - securityState.lastAttempt;
+                if (timeSinceLastAttempt < SECURITY_CONFIG.LOCKOUT_DURATION) {
+                    const remainingTime = Math.ceil((SECURITY_CONFIG.LOCKOUT_DURATION - timeSinceLastAttempt) / 60000);
+                    showSecurityMessage(`Account temporarily locked. Try again in ${remainingTime} minutes.`, 'error');
+                    return false;
+                }
+                // Reset attempts after lockout period
+                resetLoginAttempts();
+            }
+            
+            return true;
+        }
+
+        function recordFailedLogin() {
+            securityState.loginAttempts++;
+            securityState.lastAttempt = Date.now();
+            localStorage.setItem('loginAttempts', securityState.loginAttempts.toString());
+            localStorage.setItem('lastLoginAttempt', securityState.lastAttempt.toString());
+            
+            const remaining = SECURITY_CONFIG.MAX_LOGIN_ATTEMPTS - securityState.loginAttempts;
+            if (remaining > 0) {
+                showSecurityMessage(`Invalid credentials. ${remaining} attempts remaining.`, 'warning');
+            }
+        }
+
+        function resetLoginAttempts() {
+            securityState.loginAttempts = 0;
+            securityState.lastAttempt = 0;
+            localStorage.removeItem('loginAttempts');
+            localStorage.removeItem('lastLoginAttempt');
+        }
+
+        // Session Management
+        function checkSession() {
+            const now = Date.now();
+            if (now - securityState.sessionStart > SECURITY_CONFIG.SESSION_TIMEOUT) {
+                showSecurityMessage('Session expired. Please log in again.', 'warning');
+                // Redirect to login or refresh session
+                return false;
+            }
+            return true;
+        }
+
+        function refreshSession() {
+            securityState.sessionStart = Date.now();
+        }
+
+        // Security Messages
+        function showSecurityMessage(message, type = 'info') {
+            const container = document.getElementById('message-container') || document.getElementById('modal-message-container');
+            if (!container) return;
+            
+            const messageEl = document.createElement('div');
+            messageEl.className = `security-message ${type}`;
+            messageEl.innerHTML = `
+                <i class="fas fa-shield-alt"></i>
+                <span>${escapeHtml(message)}</span>
+                <button onclick="this.parentElement.remove()" class="close-btn">&times;</button>
+            `;
+            
+            container.appendChild(messageEl);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (messageEl.parentElement) {
+                    messageEl.remove();
+                }
+            }, 5000);
+        }
+
+        // HTML Escaping
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Content Security Policy Violation Handler
+        document.addEventListener('securitypolicyviolation', function(event) {
+            console.warn('CSP Violation:', event.violatedDirective, event.blockedURI);
+            // Optional: Send violation reports to server
+        });
+
+        // Detect Developer Tools
+        let devtools = {open: false, orientation: null};
+        function detectDevTools() {
+            const threshold = 160;
+            setInterval(() => {
+                if (window.outerHeight - window.innerHeight > threshold || 
+                    window.outerWidth - window.innerWidth > threshold) {
+                    if (!devtools.open) {
+                        devtools.open = true;
+                        console.warn('Developer tools detected');
+                        // Optional: Log this event or show warning
+                    }
+                } else {
+                    devtools.open = false;
+                }
+            }, 500);
+        }
+
+        // Disable common debugging methods
+        function disableDebugging() {
+            // Disable right-click context menu
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Disable F12, Ctrl+Shift+I, Ctrl+U
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                    (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // Disable text selection on sensitive areas
+            document.querySelectorAll('.auth-form, .sensitive-content').forEach(el => {
+                el.style.userSelect = 'none';
+                el.style.webkitUserSelect = 'none';
+                el.style.mozUserSelect = 'none';
+                el.style.msUserSelect = 'none';
+            });
+        }
+
+        // Initialize Security
+        function initSecurity() {
+            initCSRF();
+            detectDevTools();
+            disableDebugging();
+            
+            // Add security event listeners
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    // Optional: Pause sensitive operations when tab is hidden
+                }
+            });
+            
+            // Monitor for suspicious activity
+            let clickCount = 0;
+            document.addEventListener('click', function() {
+                clickCount++;
+                if (clickCount > 100) { // Excessive clicking
+                    showSecurityMessage('Suspicious activity detected', 'warning');
+                    clickCount = 0;
+                }
+            });
+            
+            // Session activity tracking
+            ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
+                document.addEventListener(event, refreshSession, true);
+            });
+        }
+
+        // Override console methods in production
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+            console.log = console.warn = console.error = console.info = function() {};
+        }
+
+        // Show loading state
+        document.documentElement.classList.add('loading');
+        
+        // Secure form submission wrapper
+        function secureFormSubmit(formElement, submitFunction) {
+            if (!checkRateLimit()) return false;
+            if (!checkLoginAttempts()) return false;
+            if (!checkSession()) return false;
+            
+            // Validate CSRF token
+            const formToken = formElement.getAttribute('data-csrf-token');
+            if (formToken !== securityState.csrfToken) {
+                showSecurityMessage('Security token mismatch. Please refresh the page.', 'error');
+                return false;
+            }
+            
+            return submitFunction();
+        }
+
+        // Enhanced authentication handlers with security integration
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            // Use security instance if available, otherwise fallback to inline security
+            if (window.securityInstance) {
+                return window.securityInstance.secureSubmit(event.target, function() {
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+                    
+                    // Basic client-side validation
+                    if (!email || !password) {
+                        window.securityInstance.showSecurityMessage('Please fill in all fields', 'error');
+                        return false;
+                    }
+                    
+                    if (password.length < 8) {
+                        window.securityInstance.showSecurityMessage('Password must be at least 8 characters', 'error');
+                        return false;
+                    }
+                    
+                    console.log('Secure login attempt for:', email);
+                    window.securityInstance.resetLoginAttempts();
+                    return true;
+                });
+            } else {
+                return secureFormSubmit(event.target, function() {
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+                    
+                    if (!email || !password) {
+                        showSecurityMessage('Please fill in all fields', 'error');
+                        return false;
+                    }
+                    
+                    if (password.length < 8) {
+                        showSecurityMessage('Password must be at least 8 characters', 'error');
+                        return false;
+                    }
+                    
+                    console.log('Secure login attempt for:', email);
+                    resetLoginAttempts();
+                    return true;
+                });
+            }
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            if (window.securityInstance) {
+                return window.securityInstance.secureSubmit(event.target, function() {
+                    const username = document.getElementById('signup-username').value;
+                    const email = document.getElementById('signup-email').value;
+                    const password = document.getElementById('signup-password').value;
+                    
+                    // Enhanced validation
+                    if (!username || !email || !password) {
+                        window.securityInstance.showSecurityMessage('Please fill in all fields', 'error');
+                        return false;
+                    }
+                    
+                    if (username.length < 3 || username.length > 30) {
+                        window.securityInstance.showSecurityMessage('Username must be 3-30 characters', 'error');
+                        return false;
+                    }
+                    
+                    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                        window.securityInstance.showSecurityMessage('Username can only contain letters, numbers, and underscores', 'error');
+                        return false;
+                    }
+                    
+                    if (password.length < 8) {
+                        window.securityInstance.showSecurityMessage('Password must be at least 8 characters', 'error');
+                        return false;
+                    }
+                    
+                    const strength = calculatePasswordStrength(password);
+                    if (strength === 'Very Weak' || strength === 'Weak') {
+                        window.securityInstance.showSecurityMessage('Please choose a stronger password', 'error');
+                        return false;
+                    }
+                    
+                    console.log('Secure signup attempt for:', email);
+                    return true;
+                });
+            } else {
+                return secureFormSubmit(event.target, function() {
+                    const username = document.getElementById('signup-username').value;
+                    const email = document.getElementById('signup-email').value;
+                    const password = document.getElementById('signup-password').value;
+                    
+                    if (!username || !email || !password) {
+                        showSecurityMessage('Please fill in all fields', 'error');
+                        return false;
+                    }
+                    
+                    if (username.length < 3 || username.length > 30) {
+                        showSecurityMessage('Username must be 3-30 characters', 'error');
+                        return false;
+                    }
+                    
+                    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                        showSecurityMessage('Username can only contain letters, numbers, and underscores', 'error');
+                        return false;
+                    }
+                    
+                    if (password.length < 8) {
+                        showSecurityMessage('Password must be at least 8 characters', 'error');
+                        return false;
+                    }
+                    
+                    const strength = calculatePasswordStrength(password);
+                    if (strength === 'Very Weak' || strength === 'Weak') {
+                        showSecurityMessage('Please choose a stronger password', 'error');
+                        return false;
+                    }
+                    
+                    console.log('Secure signup attempt for:', email);
+                    return true;
+                });
+            }
+        }
+
+        function handleForgotPassword(event) {
+            event.preventDefault();
+            
+            if (window.securityInstance) {
+                return window.securityInstance.secureSubmit(event.target, function() {
+                    const email = document.getElementById('reset-email').value;
+                    
+                    if (!email) {
+                        window.securityInstance.showSecurityMessage('Please enter your email address', 'error');
+                        return false;
+                    }
+                    
+                    console.log('Secure password reset request for:', email);
+                    return true;
+                });
+            } else {
+                return secureFormSubmit(event.target, function() {
+                    const email = document.getElementById('reset-email').value;
+                    
+                    if (!email) {
+                        showSecurityMessage('Please enter your email address', 'error');
+                        return false;
+                    }
+                    
+                    console.log('Secure password reset request for:', email);
+                    return true;
+                });
+            }
+        }
+
+        // Auto-sanitize all inputs with security attributes
+        function setupAutoSanitization() {
+            document.querySelectorAll('input[data-max-length]').forEach(input => {
+                input.addEventListener('input', function() {
+                    if (window.securityInstance) {
+                        window.securityInstance.sanitizeInput(this);
+                    } else {
+                        sanitizeInput(this);
+                    }
+                });
+            });
+        }
+
+        // Initialize security integration
+        function initSecurityIntegration() {
+            setupAutoSanitization();
+            
+            // Initialize security if not already done
+            if (!window.securityInstance) {
+                initSecurity();
+            }
+            
+            console.log('🔒 Security integration initialized');
+        }
+
+        // Initialize security when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                initSecurity();
+                initSecurityIntegration();
+            });
+        } else {
+            initSecurity();
+            initSecurityIntegration();
+        }
+
+        // Track failed resources
+        const failedResources = new Set();
+        
+        // Error handling for resource loading
+        window.addEventListener('error', function(e) {
+            // Only handle resource loading errors
+            if (e.target && (e.target.tagName === 'LINK' || e.target.tagName === 'SCRIPT' || e.target.tagName === 'IMG')) {
+                const resourceUrl = e.target.src || e.target.href;
+                if (!failedResources.has(resourceUrl)) {
+                    failedResources.add(resourceUrl);
+                    console.error('Failed to load resource:', resourceUrl, e);
+                    
+                    // Update or create error message
+                    let errorMsg = document.querySelector('.error-message');
+                    if (!errorMsg) {
+                        errorMsg = document.createElement('div');
+                        errorMsg.className = 'error-message';
+                        document.body.prepend(errorMsg);
+                    }
+                    
+                    // Show all failed resources in the error message
+                    const failedList = Array.from(failedResources).map(url => {
+                        const fileName = url.split('/').pop() || url;
+                        return `<div class="failed-resource">${fileName}</div>`;
+                    }).join('');
+                    
+                    errorMsg.innerHTML = `
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="error-content">
+                            <div>Failed to load ${failedResources.size} resource(s):</div>
+                            <div class="failed-resources">${failedList}</div>
+                            <div class="error-hint">The page may not work correctly.</div>
+                        </div>
+                        <button onclick="this.parentElement.remove()" class="close-btn">&times;</button>
+                    `;
+                }
+            }
+        }, true);
+
+        // Load scripts with retry logic
+        async function loadScript(src, retries = 2, delay = 1000) {
+            return new Promise((resolve, reject) => {
+                const load = () => {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.onload = () => {
+                        console.log(`Loaded: ${src}`);
+                        resolve();
+                    };
+                    script.onerror = () => {
+                        if (retries > 0) {
+                            console.warn(`Retrying ${src}... (${retries} attempts left)`);
+                            setTimeout(() => {
+                                document.head.removeChild(script);
+                                load();
+                            }, delay);
+                            retries--;
+                        } else {
+                            console.error(`Failed to load: ${src}`);
+                            reject(new Error(`Failed to load script: ${src}`));
+                        }
+                    };
+                    document.head.appendChild(script);
+                };
+                load();
+            });
+        }
+
+        // Load all required scripts with fallback to CDN if local fails
+        async function loadAllScripts() {
+            const scripts = [
+                { src: 'animations.js', cdn: 'https://cdn.jsdelivr.net/gh/username/repo/animations.js' },
+                { src: 'theme.js', cdn: 'https://cdn.jsdelivr.net/gh/username/repo/theme.js' },
+                { src: 'auth.js', cdn: 'https://cdn.jsdelivr.net/gh/username/repo/auth.js' },
+                { src: 'script.js', cdn: 'https://cdn.jsdelivr.net/gh/username/repo/script.js' }
+            ];
+
+            try {
+                // Try to load local scripts first
+                for (const script of scripts) {
+                    try {
+                        await loadScript(script.src);
+                        console.log(`Loaded local: ${script.src}`);
+                    } catch (error) {
+                        console.warn(`Failed to load local script ${script.src}, trying CDN...`);
+                        await loadScript(script.cdn);
+                        console.log(`Loaded from CDN: ${script.src}`);
+                    }
+                }
+                
+                // Initialize auth if the function exists
+                if (typeof initAuth === 'function') {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    initAuth();
+                }
+                
+                console.log('All scripts loaded successfully');
+            } catch (error) {
+                console.error('Error loading scripts:', error);
+                // Show error message with retry button
+                const retryBtn = document.createElement('button');
+                retryBtn.className = 'retry-btn';
+                retryBtn.textContent = 'Retry Loading';
+                retryBtn.onclick = () => window.location.reload();
+                
+                const errorMsg = document.querySelector('.error-message') || document.createElement('div');
+                errorMsg.className = 'error-message';
+                errorMsg.innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="error-content">
+                        <div>Failed to load some resources.</div>
+                        <div class="error-hint">Please check your connection and try again.</div>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="close-btn">&times;</button>
+                `;
+                errorMsg.querySelector('.error-content').appendChild(retryBtn);
+                
+                if (!document.querySelector('.error-message')) {
+                    document.body.prepend(errorMsg);
+                }
+            } finally {
+                // Remove loading state
+                document.documentElement.classList.remove('loading');
+            }
+        }
+
+        // Start loading scripts when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadAllScripts);
+        } else {
+            loadAllScripts();
+        }
+
+        // --- Google OAuth UI update reliability fix ---
+        // Listen for postMessage from OAuth popup and update UI
+        window.addEventListener('message', function(event) {
+            // Only accept messages from our backend (origin check)
+            // You may want to restrict this to your backend's origin
+            if (event.data && event.data.type === 'social-login-success' && event.data.user) {
+                // UI update is now handled by the session check in auth.js, which is
+                // triggered after the social login popup closes. This avoids race
+                // conditions and duplicate UI elements.
+                if (typeof window.checkUserSession === 'function') {
+                    window.checkUserSession(); // Trigger a re-check.
+                }
+
+                // Hide auth modal if open
+                var authModal = document.getElementById('auth-modal');
+                if (authModal) authModal.style.display = 'none';
+            }
+        });
+
+        // Fallback: After popup closes, re-check session and update UI
+        function getBackendUrl(path) {
+            // Change this port if your backend runs on a different port
+            const backendPort = 5000;
+            // Always use the same host as the frontend to avoid CORS issues
+            // Use window.location.hostname so if you open the site as 127.0.0.1, backend is also 127.0.0.1
+            const backendHost = window.location.hostname;
+            return `http://${backendHost}:${backendPort}${path}`;
+        }
+
+        // --- User Profile UI logic ---
+// Removed updateUserProfileUI from index.html. All user profile UI is now managed by auth.js.
+
+        function logoutUser() {
+            fetch(getBackendUrl('/api/logout'), { method: 'POST', credentials: 'include' })
+                .then(() => {
+                    // Remove user profile from navbar
+                    var profile = document.getElementById('nav-user-profile');
+                    if (profile) profile.remove();
+                    // Show login/signup buttons
+                    var loginBtn = document.getElementById('nav-login-btn');
+                    var signupBtn = document.getElementById('nav-signup-btn');
+                    if (loginBtn) loginBtn.style.display = '';
+                    if (signupBtn) signupBtn.style.display = '';
+                });
+        }
+
+        function checkSessionAndUpdateUI() {
+            // This function is now handled by auth.js DOMContentLoaded listener
+            // to avoid conflicts. Just ensure auth.js is loaded.
+            console.log('Index.html: Session check delegated to auth.js');
+        }
+
+        // Monitor popup window for close event
+        window.loginWithSocial = function(provider) {
+            var popup = window.open(getBackendUrl(`/api/auth/${provider}`), 'socialLogin', 'width=500,height=600');
+            if (!popup) return;
+            var pollTimer = setInterval(function() {
+                if (popup.closed) {
+                    clearInterval(pollTimer);
+                    // Let auth.js handle the session check after popup closes
+                    if (typeof window.checkUserSession === 'function') {
+                        window.checkUserSession();
+                    }
+                }
+            }, 500);
+        };
+
+        // On page load, always check session and update UI
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', checkSessionAndUpdateUI);
+        } else {
+            checkSessionAndUpdateUI();
+        }
+
+        // Join Channels button handler
+        window.openJoinChannels = function(event) {
+            event.preventDefault();
+            
+            // Track the click
+            if (typeof window.EmojiGifWebsite !== 'undefined' && window.websiteInstance) {
+                window.websiteInstance.trackChannelPageVisit();
+            }
+            
+            // Open in new window/tab
+            const joinWindow = window.open('join-channels.html', '_blank', 'width=1200,height=800');
+            
+            // Fallback if popup blocked
+            if (!joinWindow) {
+                alert('Popup blocked! Please allow popups or manually navigate to join-channels.html');
+                window.location.href = 'join-channels.html';
+            }
+            
+            return false;
+        };
+
+
+        // Make Join Channels button open in the same page (no new tab)
+        document.addEventListener('DOMContentLoaded', function() {
+            const joinBtn = document.getElementById('join-channels-btn');
+            if (joinBtn) {
+                joinBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.location.href = 'join-channels.html';
+                });
+                // Add visual feedback
+                joinBtn.addEventListener('mousedown', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                joinBtn.addEventListener('mouseup', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            }
+        });
+
+        // Test function for join channels
+        window.testJoinChannels = function() {
+            console.log('🧪 Manual test: Opening join channels...');
+            
+            // Try multiple methods
+            try {
+                const newWindow = window.open('join-channels.html', '_blank');
+                if (newWindow) {
+                    console.log('✅ Method 1: window.open() successful');
+                } else {
+                    console.log('❌ Method 1: window.open() blocked');
+                    throw new Error('Popup blocked');
+                }
+            } catch (error) {
+                console.log('❌ Method 1 failed:', error.message);
+                console.log('🔄 Trying Method 2: location.href...');
+                window.location.href = 'join-channels.html';
+            }
+        };
+
+        // Modal entrance/exit animation trigger (ensure animation on open/close)
+        function showAuthModal(formType) {
+            var modal = document.getElementById('auth-modal');
+            var content = modal ? modal.querySelector('.animated-modal') : null;
+            if (modal && content) {
+                modal.style.display = 'block';
+                content.classList.remove('hide');
+                content.style.animation = 'none';
+                void content.offsetWidth;
+                content.style.animation = null;
+            }
+            // Animate form entrance
+            var forms = modal ? modal.querySelectorAll('.animated-form') : [];
+            forms.forEach(function(form) {
+                form.classList.remove('hide');
+                form.style.animation = 'none';
+                void form.offsetWidth;
+                form.style.animation = null;
+            });
+        }
+
+        function closeAuthModal() {
+            var modal = document.getElementById('auth-modal');
+            var content = modal ? modal.querySelector('.animated-modal') : null;
+            if (modal && content) {
+                content.classList.add('hide');
+                // Animate forms out
+                var forms = modal.querySelectorAll('.animated-form');
+                forms.forEach(function(form) {
+                    form.classList.add('hide');
+                });
+                setTimeout(function() {
+                    modal.style.display = 'none';
+                    content.classList.remove('hide');
+                    forms.forEach(function(form) {
+                        form.classList.remove('hide');
+                    });
+                }, 500); // match animation duration
+            } else if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Password strength meter
+        function updatePasswordStrength() {
+            const password = document.getElementById('signup-password').value;
+            const strength = calculatePasswordStrength(password);
+            const strengthText = document.getElementById('password-strength');
+            if (strengthText) {
+                strengthText.textContent = `Password Strength: ${strength}`;
+                strengthText.style.color = getStrengthColor(strength);
+            }
+        }
+
+        function calculatePasswordStrength(password) {
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (password.length >= 16) strength++;
+            if (password.length >= 20) strength++;
+            if (password.length >= 24) strength++;
+            if (password.length >= 28) strength++;
+            if (password.length >= 32) strength++;
+
+            if (password.length < 8) return 'Very Weak';
+            if (password.length < 12) return 'Weak';
+            if (password.length < 16) return 'Moderate';
+            if (password.length < 20) return 'Strong';
+            if (password.length < 24) return 'Very Strong';
+            if (password.length < 28) return 'Extremely Strong';
+            if (password.length >= 32) return 'Ultra Strong';
+            return 'Very Weak'; // Default
+        }
+
+        function getStrengthColor(strength) {
+            switch (strength) {
+                case 'Very Weak': return '#ff5e5e';
+                case 'Weak': return '#ff9800';
+                case 'Moderate': return '#ffc107';
+                case 'Strong': return '#4caf50';
+                case 'Very Strong': return '#4caf50';
+                case 'Extremely Strong': return '#4caf50';
+                case 'Ultra Strong': return '#4caf50';
+                default: return '#888';
+            }
+        }
+    </script>
+    <script src="click-spark.js"></script>
+    <script src="security.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        window.createClickSpark({
+          sparkColor: '#fff',
+          sparkSize: 10,
+          sparkRadius: 15,
+          sparkCount: 8,
+          duration: 400
+        });
+      });
+    </script>
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        once: true,
+        duration: 900,
+        offset: 60
+      });
+    </script>
+    
+    <!-- Lenis Smooth Scroll Configuration -->
+    <script src="lenis-config.js"></script>
+    
+    <!-- GSAP and ScrollTrigger CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</body>
+</html>
