@@ -13,8 +13,14 @@ This folder contains the source code and assets for the website.
 Open `index.html` in your browser to view the website.
 
 ## Deployment
-You can upload this folder to your GitHub repository. No sensitive information is included by default.
+To deploy this website:
+- Upload all files and folders to your web server or hosting platform.
+- Ensure the `assets/` and `backend/` folders (if used) are included.
+- For static hosting (GitHub Pages, Netlify, Vercel), place all files in the root or `public` directory.
 
 ## Notes
-- If you use any API keys or secrets, do not commit them.
-- For backend code, use the `backend/` subfolder.
+Keep in mind when deploying:
+- Do not include any sensitive information (API keys, passwords).
+- Check file permissions and access settings for backend code.
+- Test the website after deployment to ensure all links and resources work correctly.
+
